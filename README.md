@@ -27,6 +27,8 @@ flowchart TB
 
 - Screening-process reference table: [screening_process_reference.csv](screening_process_reference.csv)
 - Final screened 66 papers: [final_screened_66_papers.csv](final_screened_66_papers.csv)
+- Level 4 production-system-object papers: [level4_production_system_20_papers.csv](level4_production_system_20_papers.csv)
+- Final screened 66 papers BibTeX: [final_screened_66_papers.bib](final_screened_66_papers.bib)
 - Level 4 added transferable papers only: [level4_added_transferable_papers.csv](level4_added_transferable_papers.csv)
 
 Intermediate working files, including the raw Scopus export and per-level outputs, are kept in [intermediate_results](intermediate_results).
