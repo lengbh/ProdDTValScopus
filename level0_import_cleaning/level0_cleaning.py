@@ -84,11 +84,20 @@ def title_language_flag(title: str) -> str:
 
 
 def main() -> int:
-    if len(sys.argv) != 3:
+    script_dir = Path(__file__).resolve().parent
+    write_split_outputs = False
+    if len(sys.argv) == 1:
+        input_path = script_dir / "screening_table.csv"
+        output_path = script_dir / "screening_level0.csv"
+        included_output_path = script_dir / "screening_after_level0_included.csv"
+        excluded_output_path = script_dir / "screening_level0_excluded_records.csv"
+        write_split_outputs = True
+    elif len(sys.argv) == 3:
+        input_path = Path(sys.argv[1])
+        output_path = Path(sys.argv[2])
+    else:
         print("Usage: level0_cleaning.py input.csv output.csv", file=sys.stderr)
         return 2
-    input_path = Path(sys.argv[1])
-    output_path = Path(sys.argv[2])
     with input_path.open(encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         original_fields = list(reader.fieldnames or [])
@@ -122,6 +131,20 @@ def main() -> int:
         writer = csv.DictWriter(handle, fieldnames=output_fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
+
+    if write_split_outputs:
+        included_rows = [row for row in rows if row.get("level_0_decision") == "Include"]
+        excluded_rows = [row for row in rows if row.get("level_0_decision") == "Exclude"]
+        with included_output_path.open("w", encoding="utf-8-sig", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=output_fields, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(included_rows)
+        with excluded_output_path.open("w", encoding="utf-8-sig", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=output_fields, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(excluded_rows)
+        print(f"Wrote {len(included_rows)} included rows to {included_output_path}")
+        print(f"Wrote {len(excluded_rows)} excluded rows to {excluded_output_path}")
 
     print(f"Wrote {len(rows)} rows to {output_path}")
     return 0

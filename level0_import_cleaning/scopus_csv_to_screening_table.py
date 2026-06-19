@@ -152,11 +152,20 @@ def rows_from_scopus_csv(input_path: Path) -> list[dict[str, str]]:
 
 
 def main() -> int:
-    if len(sys.argv) != 3:
+    script_dir = Path(__file__).resolve().parent
+    if len(sys.argv) == 1:
+        matches = sorted(script_dir.glob("scopus_export_*.csv"))
+        if not matches:
+            print("Usage: scopus_csv_to_screening_table.py input.csv output.csv", file=sys.stderr)
+            return 2
+        input_path = matches[0]
+        output_path = script_dir / "screening_table.csv"
+    elif len(sys.argv) == 3:
+        input_path = Path(sys.argv[1])
+        output_path = Path(sys.argv[2])
+    else:
         print("Usage: scopus_csv_to_screening_table.py input.csv output.csv", file=sys.stderr)
         return 2
-    input_path = Path(sys.argv[1])
-    output_path = Path(sys.argv[2])
     if input_path.suffix.lower() != ".csv":
         print("This converter expects a Scopus CSV export.", file=sys.stderr)
         return 2

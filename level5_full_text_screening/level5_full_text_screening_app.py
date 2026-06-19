@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local browser GUI for Level 4 production-system object classification."""
+"""Local browser GUI for Level 5 full-text screening and object classification."""
 
 from __future__ import annotations
 
@@ -15,13 +15,12 @@ from urllib.parse import urlparse
 
 
 APP_DIR = Path(__file__).resolve().parent
-INTERMEDIATE_DIR = APP_DIR / "intermediate_results"
-DEFAULT_INPUT = INTERMEDIATE_DIR / "object_classification_input.csv"
-DEFAULT_DECISIONS = INTERMEDIATE_DIR / "object_classification_decisions.json"
-DEFAULT_OUTPUT = INTERMEDIATE_DIR / "object_classification_review.csv"
-DEFAULT_PRODUCTION_OUTPUT = INTERMEDIATE_DIR / "object_classification_production_system.csv"
-DEFAULT_NON_PRODUCTION_OUTPUT = INTERMEDIATE_DIR / "object_classification_non_production_used.csv"
-DEFAULT_EXCLUDED_OUTPUT = INTERMEDIATE_DIR / "object_classification_excluded.csv"
+DEFAULT_INPUT = APP_DIR.parent / "level4_full_text_availability" / "level4_full_text_availability_66_papers.csv"
+DEFAULT_DECISIONS = APP_DIR / "level5_full_text_screening_decisions.json"
+DEFAULT_OUTPUT = APP_DIR / "level5_full_text_screening_59_papers.csv"
+DEFAULT_PRODUCTION_OUTPUT = APP_DIR / "level5_production_system_papers.csv"
+DEFAULT_NON_PRODUCTION_OUTPUT = APP_DIR / "level5_other_general_papers.csv"
+DEFAULT_EXCLUDED_OUTPUT = APP_DIR / "level5_excluded_after_full_text_screening.csv"
 
 DECISIONS = {
     "PRODUCTION_SYSTEM": "Object is production system",
@@ -35,7 +34,7 @@ HTML = r"""<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Level 4 Object Classification Review</title>
+  <title>Level 5 Full-Text Screening Review</title>
   <style>
     :root {
       --bg: #f7f8fa;
@@ -217,7 +216,7 @@ HTML = r"""<!doctype html>
 </head>
 <body>
   <header>
-    <h1>Level 4 Production-System Object Classification</h1>
+    <h1>Level 5 Full-Text Screening</h1>
     <div class="status" id="status"></div>
   </header>
   <main>
@@ -645,7 +644,7 @@ class ReusableTCPServer(socketserver.ThreadingTCPServer):
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run the Level 4 production-system object classification GUI.")
+    parser = argparse.ArgumentParser(description="Run the Level 5 full-text screening and object classification GUI.")
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--decisions", type=Path, default=DEFAULT_DECISIONS)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -667,7 +666,7 @@ def main() -> int:
     store.export()
     handler = make_handler(store)
     with ReusableTCPServer((args.host, args.port), handler) as httpd:
-        print(f"Level 4 object classification GUI: http://{args.host}:{args.port}")
+        print(f"Level 5 full-text screening GUI: http://{args.host}:{args.port}")
         print(f"Loaded {len(store.rows)} records.")
         print(f"Saving decisions to {args.decisions}")
         print(f"Exporting reviewed CSV to {args.output}")

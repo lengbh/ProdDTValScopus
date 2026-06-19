@@ -19,12 +19,11 @@ from urllib.parse import parse_qs, urlparse
 
 
 APP_DIR = Path(__file__).resolve().parent
-INTERMEDIATE_DIR = APP_DIR / "intermediate_results"
-DEFAULT_INPUT = INTERMEDIATE_DIR / "screening_after_level2_include_uncertain.csv"
-DEFAULT_DECISIONS = INTERMEDIATE_DIR / "manual_level3_screening_decisions.json"
-DEFAULT_OUTPUT = INTERMEDIATE_DIR / "screening_level3_manual_review.csv"
-DEFAULT_INCLUDED_OUTPUT = INTERMEDIATE_DIR / "screening_after_level3_included.csv"
-DEFAULT_EXCLUDED_OUTPUT = INTERMEDIATE_DIR / "screening_level3_excluded_records.csv"
+DEFAULT_INPUT = APP_DIR.parent / "level2_abstract_screening" / "screening_after_level2_include_uncertain.csv"
+DEFAULT_DECISIONS = APP_DIR / "manual_level3_screening_decisions.json"
+DEFAULT_OUTPUT = APP_DIR / "screening_level3_manual_review.csv"
+DEFAULT_INCLUDED_OUTPUT = APP_DIR / "screening_after_level3_included.csv"
+DEFAULT_EXCLUDED_OUTPUT = APP_DIR / "screening_level3_excluded_records.csv"
 REVIEW_DECISIONS = {"Include", "Uncertain"}
 
 

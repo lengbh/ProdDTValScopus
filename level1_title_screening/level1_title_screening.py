@@ -294,17 +294,23 @@ def write_rows(path: Path, rows: list[dict[str, str]], fields: list[str]) -> Non
 
 
 def main() -> int:
-    if len(sys.argv) != 5:
+    script_dir = Path(__file__).resolve().parent
+    if len(sys.argv) == 1:
+        input_path = script_dir.parent / "level0_import_cleaning" / "screening_after_level0_included.csv"
+        full_output_path = script_dir / "screening_level1.csv"
+        pass_output_path = script_dir / "screening_after_level1_include_uncertain.csv"
+        excluded_output_path = script_dir / "screening_level1_excluded_records.csv"
+    elif len(sys.argv) == 5:
+        input_path = Path(sys.argv[1])
+        full_output_path = Path(sys.argv[2])
+        pass_output_path = Path(sys.argv[3])
+        excluded_output_path = Path(sys.argv[4])
+    else:
         print(
             "Usage: level1_title_screening.py input.csv full_output.csv pass_output.csv excluded_output.csv",
             file=sys.stderr,
         )
         return 2
-
-    input_path = Path(sys.argv[1])
-    full_output_path = Path(sys.argv[2])
-    pass_output_path = Path(sys.argv[3])
-    excluded_output_path = Path(sys.argv[4])
 
     with input_path.open(encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
